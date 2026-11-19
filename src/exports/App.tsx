@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { ConfirmationPage } from "../pages/ConfirmationPage";
 import { OrderPage } from "../pages/OrderPage";
-import type { Cart, PlacedOrder } from "./types";
+import { useLocalStorage } from "../lib/useLocalStorage";
+import type { Cart, PlacedOrder } from "../data/types";
 
 type View =
   | { name: "order" }
@@ -10,8 +10,10 @@ type View =
   | { name: "confirmed"; order: PlacedOrder };
 
 export default function FullOrderPage() {
-  const [cart, setCart] = useState<Cart>({});
-  const [view, setView] = useState<View>({ name: "order" });
+  const [cart, setCart] = useLocalStorage<Cart>("smitbite:cart", {});
+  const [view, setView] = useLocalStorage<View>("smitbite:view", {
+    name: "order",
+  });
 
   const setQuantity = (id: string, qty: number) =>
     setCart((c) => {

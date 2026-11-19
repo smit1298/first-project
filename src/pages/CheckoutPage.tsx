@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { PaymentModal } from "../components/PaymentModal";
 import { cartLines, cartTotals, formatMoney } from "../lib/cart";
+import { useLocalStorage } from "../lib/useLocalStorage";
 import type { Cart, CustomerDetails, PlacedOrder } from "../data/types";
 
 type Props = {
@@ -35,7 +36,10 @@ function validate(d: CustomerDetails): Errors {
 }
 
 export function CheckoutPage({ cart, onBack, onPaid }: Props) {
-  const [details, setDetails] = useState<CustomerDetails>(EMPTY);
+  const [details, setDetails] = useLocalStorage<CustomerDetails>(
+    "smitbite:customer",
+    EMPTY,
+  );
   const [errors, setErrors] = useState<Errors>({});
   const [paying, setPaying] = useState(false);
 
